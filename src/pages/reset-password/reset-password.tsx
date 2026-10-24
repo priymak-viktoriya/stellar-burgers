@@ -1,35 +1,26 @@
-import { resetPasswordApi } from '@api';
 import { ResetPasswordUI } from '@ui-pages';
-import { type SyntheticEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { resetPasswordApi } from '@utils/burger-api';
+import type { SyntheticEvent } from 'react';
 
 export const ResetPassword = (): React.JSX.Element => {
-  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-
-    setError(null);
-    void resetPasswordApi({ password, token })
-      .then(() => {
-        localStorage.removeItem('resetPassword');
-        void navigate('/login');
-      })
-      .catch((err: Error) => setError(err));
+    if (!password || !token) return;
+    resetPasswordApi({ password, token })
+      .then(() => navigate('/login'))
+      .catch((err) => setError((err as Error).message));
   };
-
-  useEffect(() => {
-    if (!localStorage.getItem('resetPassword')) {
-      void navigate('/forgot-password', { replace: true });
-    }
-  }, [navigate]);
 
   return (
     <ResetPasswordUI
-      errorText={error?.message}
+      errorText={error}
       password={password}
       token={token}
       setPassword={setPassword}
