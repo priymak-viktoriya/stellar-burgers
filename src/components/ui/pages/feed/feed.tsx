@@ -14,6 +14,12 @@ export const FeedUI = ({ orders, handleGetFeeds }: FeedUIProps): React.JSX.Eleme
       <button
         className="text text_type_main-default ml-2 mb-4"
         onClick={handleGetFeeds}
+        style={{ 
+          background: 'none', 
+          border: 'none', 
+          cursor: 'pointer', 
+          color: '#8585ad' 
+        }}
       >
         Обновить
       </button>

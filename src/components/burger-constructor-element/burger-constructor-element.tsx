@@ -7,17 +7,16 @@ export const BurgerConstructorElement = memo(function BurgerConstructorElement({
   ingredient,
   index,
   totalItems,
+  handleClose,
+  moveCard,
 }: BurgerConstructorElementProps): React.JSX.Element {
-  const handleMoveDown = (): void => {
-    // TODO
-  };
-
+  
   const handleMoveUp = (): void => {
-    // TODO
+    if (index > 0) moveCard(index, index - 1);
   };
 
-  const handleClose = (): void => {
-    // TODO
+  const handleMoveDown = (): void => {
+    if (index < totalItems - 1) moveCard(index, index + 1);
   };
 
   return (

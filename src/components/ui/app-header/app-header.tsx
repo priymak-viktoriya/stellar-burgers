@@ -19,6 +19,7 @@ export const AppHeaderUI = ({ userName }: TAppHeaderUIProps): React.JSX.Element 
         <NavLink to="/" className={({ isActive }) => `${styles.link} ${isActive ? styles.link_active : ''}`}>
           {({ isActive }) => (
             <>
+              {/* Передаем type={isActive ? 'primary' : 'secondary'} в иконку */}
               <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
               <p className="text text_type_main-default ml-2">Конструктор</p>
             </>

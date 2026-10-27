@@ -16,6 +16,7 @@ import {
   NotFound404,
 } from '@pages';
 import { authChecked, getUser } from '../../services/slices/userSlice';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 import { useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
@@ -31,6 +32,8 @@ const App = (): React.JSX.Element => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    void dispatch(fetchIngredients());
+    
     if (localStorage.getItem('refreshToken')) {
       void dispatch(getUser());
     } else {

@@ -18,6 +18,8 @@ export const BurgerConstructorUI = ({
   orderModalData,
   onOrderClick,
   closeOrderModal,
+  handleRemoveIngredient,
+  handleMoveIngredient,
 }: BurgerConstructorUIProps): React.JSX.Element => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
@@ -46,6 +48,8 @@ export const BurgerConstructorUI = ({
               index={index}
               totalItems={constructorItems.ingredients.length}
               key={item.id}
+              handleClose={() => handleRemoveIngredient(item.id)} // <--- Вот это
+              moveCard={handleMoveIngredient} // <--- И вот это
             />
           )
         )
@@ -77,7 +81,7 @@ export const BurgerConstructorUI = ({
         <p className={`text ${styles.text} mr-2`}>{price}</p>
         <CurrencyIcon type="primary" />
       </div>
-      <Button htmlType="button" type="primary" size="large" onClick={onOrderClick}>
+      <Button htmlType="button" type="primary" size="large" onClick={onOrderClick} disabled={!constructorItems.bun}>
         Оформить заказ
       </Button>
     </div>

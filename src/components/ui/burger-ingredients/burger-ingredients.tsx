@@ -36,18 +36,18 @@ export const BurgerIngredientsUI = ({
           <Tab value="bun" active={currentTab === 'bun'} onClick={() => handleTabClick('bun')}>
             Булки
           </Tab>
-          <Tab value="main" active={currentTab === 'main'} onClick={() => handleTabClick('main')}>
-            Начинки
-          </Tab>
           <Tab value="sauce" active={currentTab === 'sauce'} onClick={() => handleTabClick('sauce')}>
             Соусы
+          </Tab>
+          <Tab value="main" active={currentTab === 'main'} onClick={() => handleTabClick('main')}>
+            Начинки
           </Tab>
         </ul>
       </nav>
       <div className={styles.content}>
         <IngredientsCategory title="Булки" titleId="bun" titleRef={bunsRef} ingredients={buns} ingredientsCounters={ingredientsCounters} />
-        <IngredientsCategory title="Начинки" titleId="main" titleRef={mainsRef} ingredients={mains} ingredientsCounters={ingredientsCounters} />
         <IngredientsCategory title="Соусы" titleId="sauce" titleRef={saucesRef} ingredients={sauces} ingredientsCounters={ingredientsCounters} />
+        <IngredientsCategory title="Начинки" titleId="main" titleRef={mainsRef} ingredients={mains} ingredientsCounters={ingredientsCounters} />
       </div>
     </section>
   );

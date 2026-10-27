@@ -1,26 +1,14 @@
-import { useEffect } from 'react';
 import { BurgerIngredients, BurgerConstructor } from '@components';
-import { useDispatch } from '../../services/store';
-import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 import styles from './constructor-page.module.css';
 
-export const ConstructorPage = (): React.JSX.Element => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // Запрашиваем ингредиенты при входе на страницу
-    void dispatch(fetchIngredients());
-  }, [dispatch]);
-
-  return (
-    <main className={styles.containerMain}>
-      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
-        Соберите бургер
-      </h1>
-      <div className={`${styles.main} pl-5 pr-5`}>
-        <BurgerIngredients />
-        <BurgerConstructor />
-      </div>
-    </main>
-  );
-};
+export const ConstructorPage = (): React.JSX.Element => (
+  <main className={styles.containerMain}>
+    <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>
+      Соберите бургер
+    </h1>
+    <div className={`${styles.main} pl-5 pr-5`}>
+      <BurgerIngredients />
+      <BurgerConstructor />
+    </div>
+  </main>
+);

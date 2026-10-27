@@ -25,5 +25,7 @@ export const DefaultConstructor: Story = {
     orderModalData: null,
     onOrderClick: fn(),
     closeOrderModal: fn(),
+    handleRemoveIngredient: fn(),
+    handleMoveIngredient: fn(),
   },
 };

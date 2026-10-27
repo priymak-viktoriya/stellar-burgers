@@ -6,6 +6,8 @@ import {
   clearConstructor,
   getConstructorBun,
   getConstructorIngredients,
+  removeIngredient, 
+  moveIngredient,  
 } from '../../services/slices/constructorSlice';
 import { clearOrder, createOrder } from '../../services/slices/orderSlice';
 
@@ -52,6 +54,8 @@ export const BurgerConstructor = (): React.JSX.Element => {
       orderModalData={orderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
+      handleRemoveIngredient={(id: string) => dispatch(removeIngredient(id))} 
+      handleMoveIngredient={(from: number, to: number) => dispatch(moveIngredient({ from, to }))}
     />
   );
 };

@@ -59,9 +59,13 @@ export const updateUserProfile = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'user/logout',
   async () => {
-    await logoutApi();
-    deleteCookie('accessToken');
-    localStorage.removeItem('refreshToken');
+    try {
+      await logoutApi();
+    } finally {
+      // Удаляем токены в любом случае, даже если сервер вернул ошибку
+      deleteCookie('accessToken');
+      localStorage.removeItem('refreshToken');
+    }
   }
 );
 
