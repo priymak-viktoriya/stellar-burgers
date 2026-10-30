@@ -1,20 +1,20 @@
 import { OrderInfoUI, Preloader } from '@ui';
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useSelector } from '../../services/store';
 import { getOrderByNumberApi } from '@utils/burger-api';
 import type { TIngredient, TOrder } from '@utils-types';
+import styles from './order-info.module.css';
 
 export const OrderInfo = (): React.JSX.Element | null => {
   const { number } = useParams<{ number: string }>();
   const num = Number(number);
+  
+  const location = useLocation();
+  const isModal = location.state?.background;
 
-  const fromFeed = useSelector((s) =>
-    s.feed.orders.find((o) => o.number === num)
-  );
-  const fromOrders = useSelector((s) =>
-    s.orders.orders.find((o) => o.number === num)
-  );
+  const fromFeed = useSelector((s) => s.feed.orders.find((o) => o.number === num));
+  const fromOrders = useSelector((s) => s.orders.orders.find((o) => o.number === num));
   const cached = fromFeed ?? fromOrders;
 
   const ingredientsMap = useSelector((s) => s.ingredients.ingredients);
@@ -25,17 +25,27 @@ export const OrderInfo = (): React.JSX.Element | null => {
   useEffect(() => {
     if (cached) {
       setOrder(cached);
+      setLoading(false);
       return;
     }
+    
     let cancelled = false;
     setLoading(true);
+    
     getOrderByNumberApi(num)
       .then((res) => {
-        if (!cancelled) setOrder(res.orders[0]);
+        if (!cancelled) {
+          // Безопасно достаем заказ из ответа
+          setOrder(res?.orders?.[0] || null);
+        }
+      })
+      .catch(() => {
+        // Если произошла ошибка, просто идем дальше
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+      
     return () => {
       cancelled = true;
     };
@@ -60,12 +70,19 @@ export const OrderInfo = (): React.JSX.Element | null => {
       0
     );
 
-const date = new Date(order.createdAt);
-return { ...order, ingredientsInfo, total, date };
+    const date = new Date(order.createdAt);
+
+    return { ...order, ingredientsInfo, total, date };
   }, [order, ingredientsMap]);
 
   if (loading) return <Preloader />;
   if (!orderInfo) return null;
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return isModal ? (
+    <OrderInfoUI orderInfo={orderInfo} />
+  ) : (
+    <div className={styles.pageWrapper}>
+      <OrderInfoUI orderInfo={orderInfo} />
+    </div>
+  );
 };

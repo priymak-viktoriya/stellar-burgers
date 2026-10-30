@@ -14,6 +14,9 @@ export const Login = (): React.JSX.Element => {
 
   const { error } = useSelector((state) => state.user);
 
+
+  const errorText = error ? 'Неверный email или пароль' : '';
+
   const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
     if (!email || !password) return;
@@ -25,13 +28,12 @@ export const Login = (): React.JSX.Element => {
         navigate(from, { replace: true });
       })
       .catch(() => {
-        // Ошибка уже выводится в UI через errorText={error}
       });
   };
 
   return (
     <LoginUI
-      errorText={error || ""}
+      errorText={errorText}
       email={email}
       setEmail={setEmail}
       password={password}
