@@ -4,10 +4,9 @@ import {
   FormattedDate,
 } from '@krgaa/react-developer-burger-ui-components';
 import { memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; 
 
 import type { OrderCardUIProps } from './type';
-
 import styles from './order-card.module.css';
 
 export const OrderCardUI = memo(function OrderCardUI({
@@ -15,6 +14,8 @@ export const OrderCardUI = memo(function OrderCardUI({
   maxIngredients,
   locationState,
 }: OrderCardUIProps): React.JSX.Element {
+  const location = useLocation(); 
+
   return (
     <Link
       to={orderInfo.number.toString()}
@@ -33,9 +34,12 @@ export const OrderCardUI = memo(function OrderCardUI({
       <h4 className={`pt-6 text text_type_main-medium ${styles.order_name}`}>
         {orderInfo.name}
       </h4>
-      {location.pathname === '/profile/orders' && (
+      
+      {/* Показываем статус только в профиле */}
+      {location.pathname.startsWith('/profile/orders') && (
         <OrderStatus status={orderInfo.status} />
       )}
+      
       <div className={`pt-6 ${styles.order_content}`}>
         <ul className={styles.ingredients}>
           {orderInfo.ingredientsToShow.map((ingredient, index) => {

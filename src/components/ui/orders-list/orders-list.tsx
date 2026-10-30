@@ -1,13 +1,15 @@
 import { OrderCard } from '@components';
-
-import type { OrdersListUIProps } from './type';
-
 import styles from './orders-list.module.css';
+import type { TOrder } from '@utils-types';
 
-export const OrdersListUI = ({ orderByDate }: OrdersListUIProps): React.JSX.Element => (
-  <div className={`${styles.content}`}>
-    {orderByDate.map((order) => (
-      <OrderCard order={order} key={order._id} />
+export type OrdersListUIProps = {
+  orders: TOrder[];
+};
+
+export const OrdersListUI = ({ orders }: OrdersListUIProps): React.JSX.Element => (
+  <ul className={styles.content}>
+    {orders.map((order) => (
+      <OrderCard key={order._id} order={order} />
     ))}
-  </div>
+  </ul>
 );

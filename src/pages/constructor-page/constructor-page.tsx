@@ -1,5 +1,4 @@
 import { BurgerIngredients, BurgerConstructor } from '@components';
-
 import styles from './constructor-page.module.css';
 
 export const ConstructorPage = (): React.JSX.Element => (

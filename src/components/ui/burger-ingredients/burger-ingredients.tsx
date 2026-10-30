@@ -1,61 +1,54 @@
-import { IngredientsCategory } from '@components';
+import { useState, useRef } from 'react';
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
-import { memo } from 'react';
-
-import type { BurgerIngredientsUIProps } from './type';
-
+import { IngredientsCategory } from '../../ingredients-category/ingredients-category';
 import styles from './burger-ingredients.module.css';
+import type { TIngredient } from '@utils-types';
 
-export const BurgerIngredientsUI = memo(function BurgerIngredientsUI({
-  currentTab,
+type TBurgerIngredientsUIProps = {
+  buns: TIngredient[];
+  sauces: TIngredient[];
+  mains: TIngredient[];
+  ingredientsCounters: Record<string, number>;
+};
+
+export const BurgerIngredientsUI = ({
   buns,
-  mains,
   sauces,
-  titleBunRef,
-  titleMainRef,
-  titleSaucesRef,
-  bunsRef,
-  mainsRef,
-  saucesRef,
-  onTabClick,
-}: BurgerIngredientsUIProps): React.JSX.Element {
+  mains,
+  ingredientsCounters,
+}: TBurgerIngredientsUIProps): React.JSX.Element => {
+  const [currentTab, setCurrentTab] = useState('bun');
+  const bunsRef = useRef<HTMLHeadingElement>(null);
+  const saucesRef = useRef<HTMLHeadingElement>(null);
+  const mainsRef = useRef<HTMLHeadingElement>(null);
+
+  const handleTabClick = (tab: string) => {
+    setCurrentTab(tab);
+    if (tab === 'bun') bunsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (tab === 'sauce') saucesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (tab === 'main') mainsRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <>
-      <section className={styles.burger_ingredients}>
-        <nav>
-          <ul className={styles.menu}>
-            <Tab value="bun" active={currentTab === 'bun'} onClick={onTabClick}>
-              Булки
-            </Tab>
-            <Tab value="main" active={currentTab === 'main'} onClick={onTabClick}>
-              Начинки
-            </Tab>
-            <Tab value="sauce" active={currentTab === 'sauce'} onClick={onTabClick}>
-              Соусы
-            </Tab>
-          </ul>
-        </nav>
-        <div className={styles.content}>
-          <IngredientsCategory
-            title="Булки"
-            titleRef={titleBunRef}
-            ingredients={buns}
-            ref={bunsRef}
-          />
-          <IngredientsCategory
-            title="Начинки"
-            titleRef={titleMainRef}
-            ingredients={mains}
-            ref={mainsRef}
-          />
-          <IngredientsCategory
-            title="Соусы"
-            titleRef={titleSaucesRef}
-            ingredients={sauces}
-            ref={saucesRef}
-          />
-        </div>
-      </section>
-    </>
+    <section className={styles.burger_ingredients}>
+      <nav>
+        <ul className={styles.menu}>
+          <Tab value="bun" active={currentTab === 'bun'} onClick={() => handleTabClick('bun')}>
+            Булки
+          </Tab>
+          <Tab value="sauce" active={currentTab === 'sauce'} onClick={() => handleTabClick('sauce')}>
+            Соусы
+          </Tab>
+          <Tab value="main" active={currentTab === 'main'} onClick={() => handleTabClick('main')}>
+            Начинки
+          </Tab>
+        </ul>
+      </nav>
+      <div className={styles.content}>
+        <IngredientsCategory title="Булки" titleId="bun" titleRef={bunsRef} ingredients={buns} ingredientsCounters={ingredientsCounters} />
+        <IngredientsCategory title="Соусы" titleId="sauce" titleRef={saucesRef} ingredients={sauces} ingredientsCounters={ingredientsCounters} />
+        <IngredientsCategory title="Начинки" titleId="main" titleRef={mainsRef} ingredients={mains} ingredientsCounters={ingredientsCounters} />
+      </div>
+    </section>
   );
-});
+};

@@ -1,74 +1,31 @@
 import { BurgerIngredientsUI } from '@ui';
-import { useMemo, useState, useRef, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-
-import type { TIngredient, TTabMode } from '@utils-types';
+import { useMemo } from 'react';
+import { useSelector } from '../../services/store';
 
 export const BurgerIngredients = (): React.JSX.Element => {
-  const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
-  const titleBunRef = useRef<HTMLHeadingElement>(null);
-  const titleMainRef = useRef<HTMLHeadingElement>(null);
-  const titleSaucesRef = useRef<HTMLHeadingElement>(null);
-  // TODO: Взять ингредиенты из стора
-  const ingredients: TIngredient[] = [];
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const bun = useSelector((state) => state.burgerConstructor.bun);
+  const selectedIngredients = useSelector((state) => state.burgerConstructor.ingredients);
 
-  const [bunsRef, inViewBuns] = useInView({
-    threshold: 0,
-  });
+  const buns = useMemo(() => ingredients.filter((i) => i.type === 'bun'), [ingredients]);
+  const sauces = useMemo(() => ingredients.filter((i) => i.type === 'sauce'), [ingredients]);
+  const mains = useMemo(() => ingredients.filter((i) => i.type === 'main'), [ingredients]);
 
-  const [mainsRef, inViewFilling] = useInView({
-    threshold: 0,
-  });
-
-  const [saucesRef, inViewSauces] = useInView({
-    threshold: 0,
-  });
-
-  useEffect(() => {
-    if (inViewBuns) {
-      setCurrentTab('bun');
-    } else if (inViewSauces) {
-      setCurrentTab('sauce');
-    } else if (inViewFilling) {
-      setCurrentTab('main');
-    }
-  }, [inViewBuns, inViewFilling, inViewSauces]);
-
-  const onTabClick = (tab: string): void => {
-    setCurrentTab(tab as TTabMode);
-    if (tab === 'bun') titleBunRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'main') titleMainRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'sauce') titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const buns = useMemo(
-    () => ingredients.filter((item: TIngredient) => item.type === 'bun'),
-    [ingredients]
-  );
-
-  const mains = useMemo(
-    () => ingredients.filter((item: TIngredient) => item.type === 'main'),
-    [ingredients]
-  );
-
-  const sauces = useMemo(
-    () => ingredients.filter((item: TIngredient) => item.type === 'sauce'),
-    [ingredients]
-  );
+  const ingredientsCounters = useMemo(() => {
+    const counters: Record<string, number> = {};
+    if (bun) counters[bun._id] = 2;
+    selectedIngredients.forEach((item) => {
+      counters[item._id] = (counters[item._id] || 0) + 1;
+    });
+    return counters;
+  }, [bun, selectedIngredients]);
 
   return (
     <BurgerIngredientsUI
-      currentTab={currentTab}
       buns={buns}
-      mains={mains}
       sauces={sauces}
-      titleBunRef={titleBunRef}
-      titleMainRef={titleMainRef}
-      titleSaucesRef={titleSaucesRef}
-      bunsRef={bunsRef}
-      mainsRef={mainsRef}
-      saucesRef={saucesRef}
-      onTabClick={onTabClick}
+      mains={mains}
+      ingredientsCounters={ingredientsCounters}
     />
   );
 };
