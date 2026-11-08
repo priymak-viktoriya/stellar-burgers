@@ -2,8 +2,12 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "verbatimModuleSyntax": false,
-    "types": ["jest", "@testing-library/jest-dom/jest-globals", "vite/client"]
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "ignoreDeprecations": "5.0",
+    "types": ["jest", "node"]
   },
-  "include": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.d.ts"],
-  "exclude": []
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
