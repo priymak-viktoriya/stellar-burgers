@@ -5,7 +5,9 @@ const config: Config = {
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'], // Добавили для надежности на Windows
   moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Защита от импортов стилей
     '^@api$': '<rootDir>/src/utils/burger-api',
     '^@api/(.*)$': '<rootDir>/src/utils/burger-api/$1',
     '^@slices$': '<rootDir>/src/services/slices',
