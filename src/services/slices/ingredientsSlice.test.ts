@@ -33,30 +33,36 @@ describe('Проверка редьюсера ingredientsSlice', () => {
 
   it('должен переводить стейт в состояние загрузки при вызове fetchIngredients.pending', () => {
     const action = { type: fetchIngredients.pending.type };
-    const result = ingredientsReducer(defaultState, action);
-    
+    // Начинаем с состояния, где уже есть ошибка, чтобы проверить, что она сбрасывается
+    const prevState = { ...defaultState, error: 'Старая ошибка' };
+    const result = ingredientsReducer(prevState, action);
+
     expect(result.isLoading).toBe(true);
     expect(result.error).toBeNull();
   });
 
   it('должен сохранять массив ингредиентов при успешном ответе fetchIngredients.fulfilled', () => {
-    const action = { 
-      type: fetchIngredients.fulfilled.type, 
-      payload: mockBurgerIngredients 
+    const action = {
+      type: fetchIngredients.fulfilled.type,
+      payload: mockBurgerIngredients
     };
-    const result = ingredientsReducer(defaultState, action);
-    
+    // Начинаем со стейта, где идет загрузка
+    const prevState = { ...defaultState, isLoading: true };
+    const result = ingredientsReducer(prevState, action);
+
     expect(result.isLoading).toBe(false);
     expect(result.ingredients).toEqual(mockBurgerIngredients);
   });
 
   it('должен записывать текст ошибки при неудачном запросе fetchIngredients.rejected', () => {
-    const action = { 
-      type: fetchIngredients.rejected.type, 
-      error: { message: 'Сервер не отвечает' } 
+    const action = {
+      type: fetchIngredients.rejected.type,
+      error: { message: 'Сервер не отвечает' }
     };
-    const result = ingredientsReducer(defaultState, action);
-    
+    // Начинаем со стейта, где идет загрузка
+    const prevState = { ...defaultState, isLoading: true };
+    const result = ingredientsReducer(prevState, action);
+
     expect(result.isLoading).toBe(false);
     expect(result.error).toBe('Сервер не отвечает');
   });

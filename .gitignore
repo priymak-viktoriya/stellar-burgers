@@ -33,3 +33,6 @@ test-results
 .env
 .env.local
 .env.*.local
+
+*.module.d.css.ts
+*.module.css.d.ts
